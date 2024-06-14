@@ -1,0 +1,109 @@
+# Speedrr Configuration File
+# https://github.com/itschasa/speedrr
+
+
+# Units to be used for all speed values
+# Options (smallest to largest):
+# - bit   = bit/s, Bits per second
+# - b     = B/s, Bytes per second
+# - kbit  = Kbit/s, Kilobits per second
+# - kb    = KB/s, Kilobytes per second
+# - mbit  = Mbit/s, Megabits per second (default)
+# - mb    = MB/s, Megabytes per second
+units: mbit
+
+# The minimum upload speed allowed on your torrent client.
+# Note: Most torrent clients won't allow you to set the upload speed to 0,
+#       so the actual minimum upload speed will be 1 Byte/s.
+min_upload: 8
+
+# The maximum upload speed allowed on your torrent client.
+# This should be around 70-80% of your total upload speed.
+max_upload: 75
+
+
+# The torrent clients to be used by Speedrr
+# Note: If you have multiple clients, Speedrr will split the upload speed between them, based on the number of seeding+downloading torrents.
+clients:
+
+  # The type of torrent client
+  # Options: qbittorrent
+  - type: qbittorrent
+
+    # The URL to your torrent client
+    url: <webui_url>
+
+    # The username and password to access your torrent client
+    username: <username>
+    password: <password>
+
+    # Whether to verify the SSL certificate of the torrent client
+    # If you are unsure what this means, leave it as is.
+    https_verify: true
+
+
+# These are the modules that Speedrr will use to determine what upload speed to set.
+modules:
+
+  # For monitoring Plex/Jellyfin streams, via Plex, Jellyfin, or Tautulli
+  # Uses the bandwidth of the streams to determine how much upload speed to deduct.
+  media_servers:
+    # Supports multiple servers
+    # Note: You should only use either plex or tautulli for every Plex Media Server you have.
+    
+    # The type of server to get data from
+    # Options: plex, tautulli, jellyfin
+    - type: <server_type>
+
+      # The URL to your Plex/Tautulli/Jellyfin server
+      url: <server_url>
+
+      # PLEX ONLY, the token to access your Plex server
+      # Help: https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/
+      token: <plex_x_token>
+
+      # TAUTULLI AND JELLYFIN ONLY, the API key to access your Tautulli/Jellyfin server
+      # Tautulli: Settings > Web Interface > API > API key
+      # Jellyfin: Dashboard > Advanced > API Keys > +
+      api_key: <api_key>
+
+      # Whether to verify the SSL certificate of the Plex/Tautulli server
+      # If you are unsure what this means, leave it as is.
+      https_verify: true
+      
+      # Bandwidth reported by Plex is multiplied by this value
+      # Plex will reserve a higher bandwidth than the actual stream requires all the time,
+      # so this value is used to reduce the reported bandwidth, if you want to.
+      bandwidth_multiplier: 1.0
+
+      # The interval in seconds to update the Plex stream data
+      update_interval: 5
+
+      # Checks if a stream is local, and if it is, it will ignore it from calculations
+      ignore_local_streams: true
+      
+      # After a stream has been paused for this amount of seconds, it will be ignored from calculations
+      # Note: To disable this feature, set to -1.
+      ignore_paused_after: 300
+  
+
+  # Changes the upload speed based on the time of day, and what day of the week
+  # Note: Recommended to use to set your upload speed to be lower during the day,
+  #       when lots of users are using your internet.
+  # Note: Supports multiple schedules.
+  schedule:
+    # The start and end time of the schedule, in 24-hour format
+    # Note: Uses your machine's local timezone.
+    - start: "05:00"
+      end: "23:30"
+
+      # The days of the week to apply the schedule to
+      # Options: all, mon, tue, wed, thu, fri, sat, sun
+      # Note: If your end time goes past midnight, you should add the next day as well.
+      days: [all]
+
+      # The upload speed deducted in this time period.
+      # Note: This can be a percentage of the maximum or a fixed value (uses units specified at the top of config).
+      # Example: 50%, 10, 5, 80%, 20%
+      upload: 60%
+
