@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>speedrr</Name>
+  <Repository>itschasa/speedrr</Repository>
+  <Registry>https://registry.hub.docker.com/r/itschasa/speedrr/</Registry>
+  <Network>host</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Project>https://github.com/itschasa/speedrr</Project>
+  <Overview>
+    Dynamically manage upload speeds on torrent clients, with Plex/Jellyfin intergration.[br]
+    Preset config available at: https://github.com/itschasa/speedrr/blob/main/config.yaml [br]
+    Config needs to be saved in your /mnt/user/appdata/speedrr/ folder.
+  </Overview>
+  <Category>Tools:Utilities MediaApp:Other MediaApp:Video MediaServer:Video</Category>
+  <WebUI/>
+  <TemplateURL>https://raw.githubusercontent.com/itschasa/speedrr/master/speedrr-unraid.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/itschasa/speedrr/master/images/speedrr.png</Icon>
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+  <Requires/>
+  <Config Name="Config Folder" Target="/data" Default="/mnt/user/appdata/speedrr" Mode="rw" Description="" Type="Path" Display="always" Required="true" Mask="false"/>
+  <Config Name="SPEEDRR_CONFIG" Target="SPEEDRR_CONFIG" Default="/data/config.yaml" Mode="" Description="" Type="Variable" Display="always" Required="true" Mask="false"/>
+  <Config Name="SPEEDRR_LOG_LEVEL" Target="SPEEDRR_LOG_LEVEL" Default="20" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false"/>
+  <Config Name="SPEEDRR_LOG_FILE_LEVEL" Target="SPEEDRR_LOG_FILE_LEVEL" Default="30" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false"/>
+</Container>

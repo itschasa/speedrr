@@ -1,7 +1,7 @@
 <p align="center">
-    <img src="https://i.imgur.com/XgRpU5l.png" alt="Speedrr" width="336" height="84">
+    <img src="https://raw.githubusercontent.com/itschasa/speedrr/master/images/speedrr_text.png" alt="speedrr" width="336" height="84">
     <br/>
-    <h1>Speedrr - Dynamic Upload Speed Manager for Torrenting</h1>
+    <h1>speedrr - Dynamic Upload Speed Manager for Torrenting</h1>
 </p>
 
 Change your torrent client's upload speed dynamically, on certain events such as:
@@ -41,6 +41,20 @@ docker run -d
     --network host
     itschasa/speedrr
 ```
+
+### Unraid
+1. Open your console and run the following command:
+```
+cd /boot/config/plugins/dockerMan/templates-user && touch my-speedrr.xml && nano my-speedrr.xml
+```
+2. Go to <a href="https://raw.githubusercontent.com/itschasa/speedrr/main/speedrr-unraid.xml">speedrr-unraid.xml</a>, and copy and paste it into your console.
+3. Press Ctrl+O, then Enter, then Ctrl+X (to save the file and exit).
+4. Open your WebUI > `Docker` > `Add Container`.
+5. Click `Select a template`, and select `speedrr`.
+6. The options should be fine as they are defaulted. Apply changes.
+7. Using the <a href="https://github.com/itschasa/speedrr/blob/main/config.yaml">template</a>, create config.yaml in your /appdata/speedrr/ folder, and fill out the config.
+8. Start/Restart the container in the WebUI.
+9. Check everything is working in the logs (Docker Logs).
 
 ### Source
 1. Download the source code.
