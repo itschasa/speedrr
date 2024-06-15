@@ -71,4 +71,4 @@ Anyone is welcome to contribute! Feel free to open pull requests.
 Please report any bugs in the <a href="https://github.com/itschasa/speedrr/issues">Issues</a> section.
 
 ## Feature Suggestions
-Got an idea for the project? Sugges it <a href="https://github.com/itschasa/speedrr/issues">here</a>!
+Got an idea for the project? Suggest it <a href="https://github.com/itschasa/speedrr/issues">here</a>!
