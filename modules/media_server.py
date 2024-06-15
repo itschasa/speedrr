@@ -133,7 +133,7 @@ class BaseServer(threading.Thread):
 
 
     def remove_old_paused(self, active_session_ids: list[str]) -> None:
-        for session_id in self._paused_since:
+        for session_id in self._paused_since.copy(): # Copy to prevent RuntimeError: dictionary changed size during iteration
             if session_id not in active_session_ids:
                 logger.debug(f"{self._logger_prefix} Removing {session_id} from paused_since, no longer in session list")
                 del self._paused_since[session_id]
