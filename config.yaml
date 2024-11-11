@@ -24,11 +24,11 @@ max_upload: 15
 # The minimum dowload speed allowed on your torrent client.
 # Note: Most torrent clients won't allow you to set the upload speed to 0,
 #       so the actual minimum upload speed will be 1 Byte/s.
-min_upload: 8
+min_download: 8
 
 # The maximum dowload speed allowed on your torrent client.
 # This should be around 80-100% of your total dowload speed.
-max_upload: 80
+max_download: 80
 
 # The torrent clients to be used by Speedrr
 # Note: If you have multiple clients, Speedrr will split the upload speed between them, based on the number of seeding+downloading torrents.
@@ -118,5 +118,5 @@ modules:
       # The dowload speed deducted in this time period.
       # Note: This can be a percentage of the maximum or a fixed value (uses units specified at the top of config).
       # Example: 50%, 10, 5, 80%, 20%
-      upload: 80%
+      download: 80%
 

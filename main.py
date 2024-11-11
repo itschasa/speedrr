@@ -112,7 +112,7 @@ if __name__ == '__main__':
         
             new_dowload_speed = max(
                 cfg.min_download,
-                (cfg.download - sum(module.get_reduction_value() for module in modules))
+                (cfg.max_download - sum(module.get_reduction_value() for module in modules))
             ) # This is in the config's units
 
             logger.info(f"New calculated dowload speed: {new_dowload_speed}{cfg.units}")
