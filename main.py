@@ -118,7 +118,7 @@ if __name__ == '__main__':
             logger.info(f"New calculated dowload speed: {new_dowload_speed}{cfg.units}")
 
             try:
-                    torrent_client.set_upload_speed(new_upload_speed)
+                    torrent_client.set_download_speed(new_dowload_speed)
                 
             except Exception:
                     logger.warn(f"An error occurred while updating {torrent_client._client_config.url}, skipping:\n" + traceback.format_exc())
