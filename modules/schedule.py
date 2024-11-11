@@ -56,11 +56,16 @@ class ScheduleThread(threading.Thread):
                 break
 
             self._days_as_int.append(['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].index(day))
-
+        
         if isinstance(self._config.upload, str):
             self._reduce_by = int(self._config.upload[:-1]) / 100 * self._module._config.max_upload
         else:
             self._reduce_by = self._config.upload
+
+        if isinstance(self._config.download, str):
+            self._reduce_by = int(self._config.download[:-1]) / 100 * self._module._config.max_upload
+        else:
+            self._reduce_by = self._config.download
         
         self.timezone = datetime.now(timezone.utc).astimezone().tzinfo
         logger.info("<ScheduleThread> Using timezone: %s", self.timezone)

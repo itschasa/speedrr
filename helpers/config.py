@@ -33,6 +33,7 @@ class ScheduleConfig(YAMLWizard):
     end: str
     days: tuple[Literal['all', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']]
     upload: Union[int, str]
+    download: Union[int, str]
 
 @dataclass(frozen=True)
 class ModulesConfig(YAMLWizard):
@@ -44,6 +45,8 @@ class SpeedrrConfig(YAMLWizard):
     units: Literal['bit', 'b', 'kbit', 'kb', 'mbit', 'mb']
     min_upload: int
     max_upload: int
+    min_download: int
+    max_download: int
     clients: List[ClientConfig]
     modules: ModulesConfig
 
