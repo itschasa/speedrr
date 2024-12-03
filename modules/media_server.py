@@ -146,7 +146,7 @@ class BaseServer(threading.Thread):
             except Exception:
                 logger.error(f"{self._logger_prefix} Error getting bandwidth:\n" + traceback.format_exc())
             else:
-                self.set_reduction(bandwidth)
+                self.set_reduction_upload(bandwidth)
             
             time.sleep(self._server_config.update_interval)
 
