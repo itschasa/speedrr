@@ -1,7 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List, Optional, Union, Literal
 from dataclass_wizard import YAMLWizard # type: ignore
-
 
 
 @dataclass(frozen=True)
@@ -42,13 +41,13 @@ class ModulesConfig(YAMLWizard):
 
 @dataclass(frozen=True)
 class SpeedrrConfig(YAMLWizard):
-    units: Literal['bit', 'b', 'kbit', 'kb', 'mbit', 'mb']
-    min_upload: int
-    max_upload: int
-    min_download: int
-    max_download: int
-    clients: List[ClientConfig]
-    modules: ModulesConfig
+    units: Literal['bit', 'b', 'kbit', 'kb', 'mbit', 'mb'] = 'mb'
+    min_upload: int = 0
+    max_upload: int = 1000000
+    min_download: int = 0
+    max_download: int = 10000000
+    clients: List[ClientConfig] = field(default_factory=list)
+    modules: ModulesConfig = field(default_factory=ModulesConfig)
 
 
 def load_config(config_file: str) -> SpeedrrConfig:
