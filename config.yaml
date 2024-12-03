@@ -4,13 +4,22 @@
 
 # Units to be used for all speed values
 # Options (smallest to largest):
-# - bit   = bit/s, Bits per second
-# - b     = B/s, Bytes per second
-# - kbit  = Kbit/s, Kilobits per second
-# - kb    = KB/s, Kilobytes per second
-# - mbit  = Mbit/s, Megabits per second (default)
-# - mb    = MB/s, Megabytes per second
-units: mbit
+# - bit   = bit/s, bits per second
+# - B     = B/s, bytes per second
+# - Kbit  = Kbit/s, kilobits per second
+# - Kibit = Kibit/s, kibibits per second
+# - KB    = KB/s, kilobytes per second
+# - KiB   = KiB/s, kibibytes per second
+# - Mbit  = Mbit/s, megabits per second
+# - Mibit = Mibit/s, mebibits per second
+# - MB    = MB/s, megabytes per second
+# - MiB   = MiB/s, mebibytes per second (default)
+# - Gbit  = Gbit/s, gigabits per second
+# - Gibit = Gibit/s, gibibits per second
+# - GB    = GB/s, gigabytes per second
+# - GiB   = GiB/s, gibibytes per second
+# Full unit names (e.g. kilobyte) can be used as well
+units: MiB
 
 # The minimum upload speed allowed on your torrent client.
 # Note: Most torrent clients won't allow you to set the upload speed to 0,
