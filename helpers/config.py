@@ -43,9 +43,9 @@ class ModulesConfig(YAMLWizard):
 class SpeedrrConfig(YAMLWizard):
     units: Literal['bit', 'b', 'kbit', 'kb', 'mbit', 'mb'] = 'mb'
     min_upload: int = 0
-    max_upload: int = 1000000
+    max_upload: int = 50
     min_download: int = 0
-    max_download: int = 10000000
+    max_download: int = 100
     clients: List[ClientConfig] = field(default_factory=list)
     modules: ModulesConfig = field(default_factory=ModulesConfig)
 
