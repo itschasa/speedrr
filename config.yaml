@@ -19,6 +19,7 @@
 # - GB    = GB/s, gigabytes per second
 # - GiB   = GiB/s, gibibytes per second
 # Full unit names (e.g. kilobyte) can be used as well
+# Note: Capitalization matters for the acronyms above.
 units: MiB
 
 # The minimum upload speed allowed on your torrent client.
