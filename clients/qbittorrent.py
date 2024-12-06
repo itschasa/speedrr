@@ -52,3 +52,11 @@ class qBittorrentClient:
             max(1, int(bit_conv(speed, self._config.units, 'b')))
         )
 
+
+    def set_download_speed(self, speed: Union[int, float]) -> None:
+        "Set the download speed limit for the client, in client units."
+        
+        logger.debug(f"<qbit|{self._client_config.url}> Setting dowload speed to {speed}{self._config.units}")
+        self._client.transfer_set_download_limit(
+            max(1, int(bit_conv(speed, self._config.units, 'b')))
+        )

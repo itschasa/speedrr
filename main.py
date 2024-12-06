@@ -110,6 +110,22 @@ if __name__ == '__main__':
 
             logger.info("Upload speeds updated")
         
+            new_dowload_speed = max(
+                cfg.min_download,
+                (cfg.max_download - sum(module.get_reduction_value() for module in modules))
+            ) # This is in the config's units
+
+            logger.info(f"New calculated dowload speed: {new_dowload_speed}{cfg.units}")
+
+            try:
+                    torrent_client.set_download_speed(new_dowload_speed)
+                
+            except Exception:
+                    logger.warn(f"An error occurred while updating {torrent_client._client_config.url}, skipping:\n" + traceback.format_exc())
+
+            else:
+                logger.info(f"Set dowload speed for {torrent_client._client_config.url} to {new_dowload_speed}{cfg.units}")
+
 
         except Exception:
             logger.error("An error occurred while updating clients:\n" + traceback.format_exc())

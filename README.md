@@ -1,7 +1,7 @@
 <p align="center">
     <img src="https://raw.githubusercontent.com/itschasa/speedrr/master/images/speedrr_text.png" alt="speedrr" width="336" height="84">
     <br/>
-    <h1>speedrr - Dynamic Upload Speed Manager for Torrenting</h1>
+    <h1>speedrr - Dynamic Upload and Download Speed Manager for Torrenting</h1>
 </p>
 
 Change your torrent client's upload speed dynamically, on certain events such as:
@@ -9,7 +9,13 @@ Change your torrent client's upload speed dynamically, on certain events such as
 - Time of day and day of the week
 - <i>More coming soon!</i>
 
-This script is ideal for users with limited upload speed, however anyone can use it to maximise their upload speed, whilst keeping their Plex/Jellyfin streams buffer-free!
+
+Change your torrent client's download speed dynamically, on certain events such as:
+- Time of day and day of the week
+- <i>More comming soon!</i>
+
+
+This script is ideal for users with limited upload speed, however anyone can use it to maximise their upload speed, whilst keeping their Plex/Jellyfin streams buffer-free! Also great to adjust the download rate during the day, in case the bandwidth is needed for something else!
 
 
 ## Features

@@ -56,11 +56,16 @@ class ScheduleThread(threading.Thread):
                 break
 
             self._days_as_int.append(['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].index(day))
-
+        
         if isinstance(self._config.upload, str):
-            self._reduce_by = int(self._config.upload[:-1]) / 100 * self._module._config.max_upload
+            self._upload_reduce_by = int(self._config.upload[:-1]) / 100 * self._module._config.max_upload
         else:
-            self._reduce_by = self._config.upload
+            self._upload_reduce_by = self._config.upload
+
+        if isinstance(self._config.download, str):
+            self._download_reduce_by = int(self._config.download[:-1]) / 100 * self._module._config.max_upload
+        else:
+            self._download_reduce_by = self._config.download
         
         self.timezone = datetime.now(timezone.utc).astimezone().tzinfo
         logger.info("<ScheduleThread> Using timezone: %s", self.timezone)
@@ -85,16 +90,27 @@ class ScheduleThread(threading.Thread):
             return datetime(now.year, now.month, now.day + 7 - current_day + self._days_as_int[0], hour, minute, tzinfo=self.timezone)
     
 
-    def set_reduction(self):
-        "Set the reduction value for the module, and dispatches an update event."
+    def set_reduction_download(self):
+        "Set the reduction download value for the module, and dispatches an update event."
 
         reduction_value = self._module.reduction_value_dict.get(self._config)
-        if reduction_value == self._reduce_by:
+        if reduction_value == self._download_reduce_by:
             return
 
-        self._module.reduction_value_dict[self._config] = self._reduce_by
+        self._module.reduction_value_dict[self._config] = self._download_reduce_by
         self._module._update_event.set()
     
+
+    def set_reduction_upload(self):
+        "Set the reduction upload value for the module, and dispatches an update event."
+
+        reduction_value = self._module.reduction_value_dict.get(self._config)
+        if reduction_value == self._upload_reduce_by:
+            return
+
+        self._module.reduction_value_dict[self._config] = self._upload_reduce_by
+        self._module._update_event.set()
+
 
     def remove_reduction(self):
         "Remove the reduction value for the module, and dispatches an update event."
@@ -116,7 +132,8 @@ class ScheduleThread(threading.Thread):
 
             if next_start_occurrence > next_end_occurrence:
                 # currently between the start and end time
-                self.set_reduction()
+                self.set_reduction_upload()
+                self.set_reduction_download()
 
                 sleeping_time = (next_end_occurrence - datetime.now(tz=self.timezone)).total_seconds()
                 logger.debug(f"<ScheduleThread> start>end, Sleeping for {sleeping_time} seconds")
