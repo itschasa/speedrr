@@ -41,7 +41,35 @@ class ModulesConfig(YAMLWizard):
 
 @dataclass(frozen=True)
 class SpeedrrConfig(YAMLWizard):
-    units: Literal['bit', 'b', 'kbit', 'kb', 'mbit', 'mb']
+    units: Literal[
+        'bit',
+        'B',
+        'byte',
+        'Kbit',
+        'kilobit',
+        'Kibit',
+        'kibibit',
+        'KB',
+        'kilobyte',
+        'KiB',
+        'kibibyte',
+        'Mbit',
+        'megabit',
+        'Mibit',
+        'mebibit',
+        'MB',
+        'megabyte',
+        'MiB',
+        'mebibyte',
+        'Gbit',
+        'gigabit',
+        'Gibit',
+        'gibibit',
+        'GB',
+        'gigabyte',
+        'GiB',
+        'gibibyte',
+    ]
     min_upload: int
     max_upload: int
     clients: List[ClientConfig]

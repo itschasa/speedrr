@@ -74,13 +74,13 @@ class BaseServer(threading.Thread):
     
 
     def get_bandwidth(self) -> int:
-        "Get the current bandwidth usage from the server, in kbit/s."
+        "Get the current bandwidth usage from the server, in Kbit/s."
         raise NotImplementedError("get_bandwidth must be implemented in a subclass")
     
 
     def set_reduction(self, reduction) -> None:
-        "Set the upload speed reduction for the server, in config units. Accepts kbit/s as input."
-        reduction = bit_conv(reduction, "kbit", self._config.units)
+        "Set the upload speed reduction for the server, in config units. Accepts Kbit/s as input."
+        reduction = bit_conv(reduction, "Kbit", self._config.units)
 
         old_reduction = self._module.reduction_value_dict.get(self._server_config)
 
@@ -154,7 +154,7 @@ class BaseServer(threading.Thread):
 
 class PlexServer(BaseServer):
     def get_bandwidth(self) -> int:
-        "Get the current bandwidth usage from Plex, in kbit/s."
+        "Get the current bandwidth usage from Plex, in Kbit/s."
 
         logger.debug(f"{self._logger_prefix} Getting bandwidth")
         
@@ -194,7 +194,7 @@ class PlexServer(BaseServer):
 
 class TautulliServer(BaseServer):
     def get_bandwidth(self) -> int:
-        "Get the current bandwidth usage from Tautulli, in kbit/s."
+        "Get the current bandwidth usage from Tautulli, in Kbit/s."
 
         logger.debug(f"{self._logger_prefix} Getting bandwidth")
         
@@ -230,7 +230,7 @@ class TautulliServer(BaseServer):
 
 class JellyfinServer(BaseServer):
     def get_bandwidth(self) -> int:
-        "Get the current bandwidth usage from Jellyfin, in kbit/s."
+        "Get the current bandwidth usage from Jellyfin, in Kbit/s."
 
         logger.debug(f"{self._logger_prefix} Getting bandwidth")
         
@@ -269,5 +269,5 @@ class JellyfinServer(BaseServer):
 
         self.remove_old_paused(session_ids)
 
-        return int(round(bit_conv(count, 'bit', 'kbit'), 0))
+        return int(round(bit_conv(count, 'bit', 'Kbit'), 0))
 
