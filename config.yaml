@@ -2,25 +2,28 @@
 # https://github.com/itschasa/speedrr
 
 
+# Directory to store logs
+logs_path: ./logs/
+
 # Units to be used for all speed values
 # Options (smallest to largest):
-# - bit   = bit/s, bits per second
-# - B     = B/s, bytes per second
-# - Kbit  = Kbit/s, kilobits per second
-# - Kibit = Kibit/s, kibibits per second
-# - KB    = KB/s, kilobytes per second
-# - KiB   = KiB/s, kibibytes per second
-# - Mbit  = Mbit/s, megabits per second
-# - Mibit = Mibit/s, mebibits per second
-# - MB    = MB/s, megabytes per second
-# - MiB   = MiB/s, mebibytes per second (default)
-# - Gbit  = Gbit/s, gigabits per second
-# - Gibit = Gibit/s, gibibits per second
-# - GB    = GB/s, gigabytes per second
-# - GiB   = GiB/s, gibibytes per second
+# - bit   = bit/s,    bits per second
+# - B     = B/s,      bytes per second
+# - Kbit  = Kbit/s,   kilobits per second
+# - Kibit = Kibit/s,  kibibits per second
+# - KB    = KB/s,     kilobytes per second
+# - KiB   = KiB/s,    kibibytes per second
+# - Mbit  = Mbit/s,   megabits per second
+# - Mibit = Mibit/s,  mebibits per second
+# - MB    = MB/s,     megabytes per second
+# - MiB   = MiB/s,    mebibytes per second
+# - Gbit  = Gbit/s,   gigabits per second
+# - Gibit = Gibit/s,  gibibits per second
+# - GB    = GB/s,     gigabytes per second
+# - GiB   = GiB/s,    gibibytes per second
 # Full unit names (e.g. kilobyte) can be used as well
 # Note: Capitalization matters for the acronyms above.
-units: MiB
+units: Mbit
 
 # The minimum upload speed allowed on your torrent client.
 # Note: Most torrent clients won't allow you to set the upload speed to 0,
@@ -31,14 +34,14 @@ min_upload: 8
 # This should be around 70-80% of your total upload speed.
 max_upload: 15
 
-# The minimum dowload speed allowed on your torrent client.
+# The minimum download speed allowed on your torrent client.
 # Note: Most torrent clients won't allow you to set the upload speed to 0,
 #       so the actual minimum upload speed will be 1 Byte/s.
-min_download: 8
+min_download: 10
 
-# The maximum dowload speed allowed on your torrent client.
-# This should be around 80-100% of your total dowload speed.
-max_download: 80
+# The maximum download speed allowed on your torrent client.
+# This should be around 70-100% of your total download speed.
+max_download: 100
 
 # The torrent clients to be used by Speedrr
 # Note: If you have multiple clients, Speedrr will split the upload speed between them, based on the number of seeding+downloading torrents.
@@ -105,7 +108,7 @@ modules:
       ignore_paused_after: 300
   
 
-  # Changes the upload speed based on the time of day, and what day of the week
+  # Changes the upload/download speed based on the time of day, and what day of the week
   # Note: Recommended to use to set your upload speed to be lower during the day,
   #       when lots of users are using your internet.
   # Note: Supports multiple schedules.
@@ -122,11 +125,11 @@ modules:
 
       # The upload speed deducted in this time period.
       # Note: This can be a percentage of the maximum or a fixed value (uses units specified at the top of config).
-      # Example: 50%, 10, 5, 80%, 20%
+      # Example: 50%, 10, 5, 80%, 20%, 0
       upload: 60%
 
-      # The dowload speed deducted in this time period.
+      # The download speed deducted in this time period.
       # Note: This can be a percentage of the maximum or a fixed value (uses units specified at the top of config).
-      # Example: 50%, 10, 5, 80%, 20%
-      download: 80%
+      # Example: 50%, 10, 5, 80%, 20%, 0
+      download: 40%
 

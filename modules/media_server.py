@@ -32,17 +32,17 @@ class MediaServerModule:
                 self.servers.append(JellyfinServer(config, server, self))
             
             else:
-                logger.error(f"Unknown media server type in config: {server.type}")
+                logger.critical(f"<media_servers> Unknown media server type in config: {server.type}")
                 exit()
 
             self.servers[-1].get_bandwidth()
 
 
-    def get_reduction_value(self) -> float:
-        "How much to reduce the upload speed by, in the config's units."
+    def get_reduction_value(self) -> tuple[float, float]:
+        "How much to reduce the speed by, in the config's units. Returns a tuple of `(upload, download)`."
 
-        logger.info(f"<media_servers> Reduction values = {'; '.join(f'{server.url}: {reduction}' for server, reduction in self.reduction_value_dict.items())}")
-        return sum(self.reduction_value_dict.values())
+        logger.info(f"<media_servers> Upload reduction values = {'; '.join(f'{server.url}: {reduction}' for server, reduction in self.reduction_value_dict.items())}")
+        return sum(self.reduction_value_dict.values()), 0
 
 
     def run(self):

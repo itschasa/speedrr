@@ -41,6 +41,7 @@ class ModulesConfig(YAMLWizard):
 
 @dataclass(frozen=True)
 class SpeedrrConfig(YAMLWizard):
+    logs_path: Optional[str]
     units: Literal[
         'bit',
         'B',
@@ -72,9 +73,14 @@ class SpeedrrConfig(YAMLWizard):
     ]
     min_upload: int
     max_upload: int
+    min_download: int
+    max_download: int
     clients: List[ClientConfig]
     modules: ModulesConfig
 
 
 def load_config(config_file: str) -> SpeedrrConfig:
-    return SpeedrrConfig.from_yaml_file(config_file)
+    config = SpeedrrConfig.from_yaml_file(config_file)
+    if isinstance(config, list):
+        raise ValueError("Config can't be a list")
+    return config

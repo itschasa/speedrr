@@ -12,16 +12,18 @@ from modules import media_server, schedule
 if __name__ == '__main__':
     args = arguments.load_args()
 
-    log_loader.file_handler.setLevel(args.log_file_level)
-    log_loader.stdout_handler.setLevel(args.log_level)
-
     logger.debug("Loading config")
 
     if not args.config:
-        logger.error("No config file specified, use --config_path arg or SPEEDRR_CONFIG env var to specify a config file.")
+        logger.critical("No config file specified, use --config_path arg or SPEEDRR_CONFIG env var to specify a config file.")
         exit()
 
     cfg = config.load_config(args.config)
+
+    if cfg.logs_path:
+        log_loader.set_file_handler(cfg.logs_path, args.log_file_level)
+    
+    log_loader.stdout_handler.setLevel(args.log_level)
     
     logger.info("Starting Speedrr")
 
@@ -35,7 +37,7 @@ if __name__ == '__main__':
             torrent_client = qbittorrent.qBittorrentClient(cfg, client)
         
         else:
-            logger.error(f"Unknown client type in config: {client.type}")
+            logger.critical(f"Unknown client type in config: {client.type}")
             exit()
 
         clients.append(torrent_client)
@@ -52,7 +54,7 @@ if __name__ == '__main__':
     
 
     if not modules:
-        logger.error("No modules enabled in config, exiting")
+        logger.critical("No modules enabled in config, exiting")
         exit()
     
 
@@ -77,12 +79,24 @@ if __name__ == '__main__':
         logger.info("Update event triggered")
 
         try:
+            module_reduction_values = [
+                module.get_reduction_value()
+                for module in modules
+            ]
+
+            # These are in the config's units
             new_upload_speed = max(
                 cfg.min_upload,
-                (cfg.max_upload - sum(module.get_reduction_value() for module in modules))
-            ) # This is in the config's units
+                (cfg.max_upload - sum(module[0] for module in module_reduction_values))
+            )
+
+            new_download_speed = max(
+                cfg.min_download,
+                (cfg.max_download - sum(module[1] for module in module_reduction_values))
+            )
 
             logger.info(f"New calculated upload speed: {new_upload_speed}{cfg.units}")
+            logger.info(f"New calculated download speed: {new_download_speed}{cfg.units}")
 
             logger.info("Getting active torrent counts")
 
@@ -94,37 +108,23 @@ if __name__ == '__main__':
             sum_active_torrents = sum(client_active_torrent_dict.values())
 
             for torrent_client, active_torrent_count in client_active_torrent_dict.items():
+                # If there are no active torrents, set the upload speed to the new speed
+                effective_upload_speed = (active_torrent_count / sum_active_torrents * new_upload_speed) if active_torrent_count > 0 else new_upload_speed
+                effective_download_speed = (active_torrent_count / sum_active_torrents * new_download_speed) if active_torrent_count > 0 else new_download_speed
+                
                 try:
-                    if active_torrent_count == 0:
-                        # if there are no active torrents, set the upload speed to the new speed
-                        torrent_client.set_upload_speed(new_upload_speed)
-                    else:
-                        torrent_client.set_upload_speed((active_torrent_count / sum_active_torrents * new_upload_speed))
+                    torrent_client.set_upload_speed(effective_upload_speed)
+                    torrent_client.set_download_speed(effective_download_speed)
                 
                 except Exception:
-                    logger.warn(f"An error occurred while updating {torrent_client._client_config.url}, skipping:\n" + traceback.format_exc())
+                    logger.warning(f"An error occurred while updating {torrent_client._client_config.url}, skipping:\n" + traceback.format_exc())
                 
                 else:
-                    logger.info(f"Set upload speed for {torrent_client._client_config.url} to {new_upload_speed}{cfg.units}")
+                    logger.info(f"Set upload speed for {torrent_client._client_config.url} to {effective_upload_speed}{cfg.units}")
+                    logger.info(f"Set download speed for {torrent_client._client_config.url} to {effective_download_speed}{cfg.units}")
             
 
-            logger.info("Upload speeds updated")
-        
-            new_dowload_speed = max(
-                cfg.min_download,
-                (cfg.max_download - sum(module.get_reduction_value() for module in modules))
-            ) # This is in the config's units
-
-            logger.info(f"New calculated dowload speed: {new_dowload_speed}{cfg.units}")
-
-            try:
-                    torrent_client.set_download_speed(new_dowload_speed)
-                
-            except Exception:
-                    logger.warn(f"An error occurred while updating {torrent_client._client_config.url}, skipping:\n" + traceback.format_exc())
-
-            else:
-                logger.info(f"Set dowload speed for {torrent_client._client_config.url} to {new_dowload_speed}{cfg.units}")
+            logger.info("Speeds updated")
 
 
         except Exception:
