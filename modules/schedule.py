@@ -12,24 +12,29 @@ class ScheduleModule:
     "A module that manages schedules."
 
     def __init__(self, config: SpeedrrConfig, module_configs: List[ScheduleConfig], update_event: threading.Event) -> None:
-        self.reduction_value_dict: dict[ScheduleConfig, float] = {}
+        self.reduction_value_dict: dict[ScheduleConfig, tuple[float, float]] = {}
 
         self._config = config
         self._module_configs = module_configs
         self._update_event = update_event
     
     
-    def get_reduction_value(self) -> float:
-        "How much to reduce the upload speed by, in the config's units."
+    def get_reduction_value(self) -> tuple[float, float]:
+        "How much to reduce the speed by, in the config's units. Returns a tuple of `(upload, download)`."
 
-        logger.info(f"<schedule> Reduction values = {'; '.join(f'{cfg.start}-{cfg.end}: {reduction}' for cfg, reduction in self.reduction_value_dict.items())}")
-        return sum(self.reduction_value_dict.values())
+        logger.info(f"<schedule> Upload reduction values = {'; '.join(f'{cfg.start}-{cfg.end}: {reduction[0]}' for cfg, reduction in self.reduction_value_dict.items())}")
+        logger.info(f"<schedule> Download reduction values = {'; '.join(f'{cfg.start}-{cfg.end}: {reduction[1]}' for cfg, reduction in self.reduction_value_dict.items())}")
+        
+        return (
+            sum([reduction[0] for reduction in self.reduction_value_dict.values()]),
+            sum([reduction[1] for reduction in self.reduction_value_dict.values()]),
+        )
     
 
     def run(self) -> None:
         "Start the schedule threads."
 
-        logger.debug("Starting schedule module threads")
+        logger.debug("<schedule> Starting schedule module threads")
         for module_config in self._module_configs:
             thread = ScheduleThread(module_config, self)
             thread.daemon = True
@@ -90,25 +95,14 @@ class ScheduleThread(threading.Thread):
             return datetime(now.year, now.month, now.day + 7 - current_day + self._days_as_int[0], hour, minute, tzinfo=self.timezone)
     
 
-    def set_reduction_download(self):
-        "Set the reduction download value for the module, and dispatches an update event."
+    def set_reduction(self):
+        "Set the reduction value for the module, and dispatches an update event."
 
         reduction_value = self._module.reduction_value_dict.get(self._config)
-        if reduction_value == self._download_reduce_by:
+        if reduction_value == (self._upload_reduce_by, self._download_reduce_by):
             return
 
-        self._module.reduction_value_dict[self._config] = self._download_reduce_by
-        self._module._update_event.set()
-    
-
-    def set_reduction_upload(self):
-        "Set the reduction upload value for the module, and dispatches an update event."
-
-        reduction_value = self._module.reduction_value_dict.get(self._config)
-        if reduction_value == self._upload_reduce_by:
-            return
-
-        self._module.reduction_value_dict[self._config] = self._upload_reduce_by
+        self._module.reduction_value_dict[self._config] = (self._upload_reduce_by, self._download_reduce_by)
         self._module._update_event.set()
 
 
@@ -132,8 +126,7 @@ class ScheduleThread(threading.Thread):
 
             if next_start_occurrence > next_end_occurrence:
                 # currently between the start and end time
-                self.set_reduction_upload()
-                self.set_reduction_download()
+                self.set_reduction()
 
                 sleeping_time = (next_end_occurrence - datetime.now(tz=self.timezone)).total_seconds()
                 logger.debug(f"<ScheduleThread> start>end, Sleeping for {sleeping_time} seconds")

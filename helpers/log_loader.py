@@ -3,13 +3,13 @@ import datetime
 from colorama import Fore
 import sys
 import traceback
+import pathlib
 
 
 
 logger_name = "speedrr"
 default_stdout_log_level = logging.INFO
-default_file_log_level = logging.WARNING
-file_log_name = 'logs/{:%Y-%m-%d %H.%M.%S}.log'.format(datetime.datetime.now())
+file_log_name = '{:%Y-%m-%d %H.%M.%S}.log'.format(datetime.datetime.now())
 log_format = '[%(asctime)s] [%(levelname)s] %(message)s (%(filename)s:%(lineno)d)'
 
 
@@ -36,10 +36,14 @@ stdout_handler.setLevel(default_stdout_log_level)
 stdout_handler.setFormatter(ColourFormatter())
 logger.addHandler(stdout_handler)
 
-file_handler = logging.FileHandler(file_log_name, encoding="utf-8")
-file_handler.setLevel(default_file_log_level)
-file_handler.setFormatter(logging.Formatter(log_format))
-logger.addHandler(file_handler)
+def set_file_handler(folder: str, level: int) -> None:
+    path = pathlib.Path(folder)
+    path.mkdir(parents=True, exist_ok=True)
+
+    file_handler = logging.FileHandler(str(pathlib.Path(folder, file_log_name)), encoding="utf-8")
+    file_handler.setLevel(level)
+    file_handler.setFormatter(logging.Formatter(log_format))
+    logger.addHandler(file_handler)
 
 def handle_exception(exc_type, exc_value, exc_traceback):
     if issubclass(exc_type, KeyboardInterrupt):
