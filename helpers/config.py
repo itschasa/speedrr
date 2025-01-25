@@ -41,13 +41,39 @@ class ModulesConfig(YAMLWizard):
 
 @dataclass(frozen=True)
 class SpeedrrConfig(YAMLWizard):
-    units: Literal['bit', 'b', 'kbit', 'kb', 'mbit', 'mb'] = 'mb'
-    min_upload: int = 0
-    max_upload: int = 50
-    min_download: int = 0
-    max_download: int = 100
-    clients: List[ClientConfig] = field(default_factory=list)
-    modules: ModulesConfig = field(default_factory=ModulesConfig)
+    units: Literal[
+        'bit',
+        'B',
+        'byte',
+        'Kbit',
+        'kilobit',
+        'Kibit',
+        'kibibit',
+        'KB',
+        'kilobyte',
+        'KiB',
+        'kibibyte',
+        'Mbit',
+        'megabit',
+        'Mibit',
+        'mebibit',
+        'MB',
+        'megabyte',
+        'MiB',
+        'mebibyte',
+        'Gbit',
+        'gigabit',
+        'Gibit',
+        'gibibit',
+        'GB',
+        'gigabyte',
+        'GiB',
+        'gibibyte',
+    ]
+    min_upload: int
+    max_upload: int
+    clients: List[ClientConfig]
+    modules: ModulesConfig
 
 
 def load_config(config_file: str) -> SpeedrrConfig:
