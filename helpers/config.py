@@ -1,7 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List, Optional, Union, Literal
 from dataclass_wizard import YAMLWizard # type: ignore
-
 
 
 @dataclass(frozen=True)
@@ -33,6 +32,7 @@ class ScheduleConfig(YAMLWizard):
     end: str
     days: tuple[Literal['all', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']]
     upload: Union[int, str]
+    download: Union[int, str]
 
 @dataclass(frozen=True)
 class ModulesConfig(YAMLWizard):

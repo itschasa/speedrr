@@ -254,7 +254,7 @@ class JellyfinServer(BaseServer):
                     
                     bandwidth = 0
                     for stream in session["NowPlayingItem"]["MediaStreams"]:
-                        bandwidth += int(stream["BitRate"])
+                        bandwidth += int(stream.get("BitRate", 0))
                 
                 else:
                     bandwidth = int(session["TranscodingInfo"]["Bitrate"])
