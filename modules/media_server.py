@@ -19,7 +19,7 @@ class MediaServerModule:
         self._module_config = module_config
         self._update_event = update_event
 
-        self.servers: list[Union[PlexServer, TautulliServer, JellyfinServer]] = []
+        self.servers: list[Union[PlexServer, TautulliServer, EmbyServer]] = []
         
         for server in self._module_config:
             if server.type == "plex":
@@ -30,6 +30,9 @@ class MediaServerModule:
             
             elif server.type == "jellyfin":
                 self.servers.append(JellyfinServer(config, server, self))
+
+            elif server.type == "emby":
+                self.servers.append(EmbyServer(config, server, self))
             
             else:
                 logger.critical(f"<media_servers> Unknown media server type in config: {server.type}")
@@ -237,6 +240,49 @@ class JellyfinServer(BaseServer):
         res = self._client.get("/Sessions", headers={"Authorization": f'MediaBrowser Token="{self._server_config.api_key}"'})
 
         logger.debug(f"{self._logger_prefix} Got {res.status_code} response from Jellyfin")
+
+        res.raise_for_status()
+
+        res_json: list[dict] = res.json()
+        
+        count = 0
+        session_ids: list[str] = []
+
+        for session in res_json:
+            if session.get("NowPlayingItem"): # Ignore sessions that aren't playing anything
+                session_ids.append(session["Id"])
+
+                if session["PlayState"]["PlayMethod"] == "DirectPlay":
+                    logger.debug(f"{self._logger_prefix} {session['Id']} is direct play, calculating estimated bandwidth from MediaStreams")
+                    
+                    bandwidth = 0
+                    for stream in session["NowPlayingItem"]["MediaStreams"]:
+                        bandwidth += int(stream.get("BitRate", 0))
+                
+                else:
+                    bandwidth = int(session["TranscodingInfo"]["Bitrate"])
+
+                count += self.process_session(
+                    bandwidth   = bandwidth,
+                    paused      = session["PlayState"]["IsPaused"],
+                    ip_address  = session["RemoteEndPoint"],
+                    session_id  = session["Id"],
+                    title       = session["NowPlayingItem"]["Name"]
+                )
+
+        self.remove_old_paused(session_ids)
+
+        return int(round(bit_conv(count, 'bit', 'Kbit'), 0))
+
+class EmbyServer(BaseServer):
+    def get_bandwidth(self) -> int:
+        "Get the current bandwidth usage from Emby, in Kbit/s."
+
+        logger.debug(f"{self._logger_prefix} Getting bandwidth")
+        
+        res = self._client.get(f"/Sessions?api_key={self._server_config.api_key}")
+
+        logger.debug(f"{self._logger_prefix} Got {res.status_code} response from Emby")
 
         res.raise_for_status()
 

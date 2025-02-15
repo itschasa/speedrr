@@ -66,26 +66,26 @@ clients:
 # These are the modules that Speedrr will use to determine what upload speed to set.
 modules:
 
-  # For monitoring Plex/Jellyfin streams, via Plex, Jellyfin, or Tautulli
+  # For monitoring Plex/Jellyfin/Emby streams, via Plex, Jellyfin, Emby, or Tautulli
   # Uses the bandwidth of the streams to determine how much upload speed to deduct.
   media_servers:
     # Supports multiple servers
     # Note: You should only use either plex or tautulli for every Plex Media Server you have.
     
     # The type of server to get data from
-    # Options: plex, tautulli, jellyfin
+    # Options: plex, tautulli, jellyfin, emby
     - type: <server_type>
 
-      # The URL to your Plex/Tautulli/Jellyfin server
+      # The URL to your Plex/Tautulli/Jellyfin/Emby server
       url: <server_url>
 
       # PLEX ONLY, the token to access your Plex server
       # Help: https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/
       token: <plex_x_token>
 
-      # TAUTULLI AND JELLYFIN ONLY, the API key to access your Tautulli/Jellyfin server
+      # TAUTULLI AND JELLYFIN ONLY, the API key to access your Tautulli/Jellyfin/Emby server
       # Tautulli: Settings > Web Interface > API > API key
-      # Jellyfin: Dashboard > Advanced > API Keys > +
+      # Jellyfin/Emby: Dashboard > Advanced > API Keys > +
       api_key: <api_key>
 
       # Whether to verify the SSL certificate of the Plex/Tautulli server
