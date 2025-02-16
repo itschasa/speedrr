@@ -83,7 +83,7 @@ modules:
       # Help: https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/
       token: <plex_x_token>
 
-      # TAUTULLI AND JELLYFIN ONLY, the API key to access your Tautulli/Jellyfin/Emby server
+      # TAUTULLI JELLYFIN AND EMBY ONLY, the API key to access your Tautulli/Jellyfin/Emby server
       # Tautulli: Settings > Web Interface > API > API key
       # Jellyfin/Emby: Dashboard > Advanced > API Keys > +
       api_key: <api_key>

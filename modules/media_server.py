@@ -19,7 +19,7 @@ class MediaServerModule:
         self._module_config = module_config
         self._update_event = update_event
 
-        self.servers: list[Union[PlexServer, TautulliServer, EmbyServer]] = []
+        self.servers: list[Union[PlexServer, TautulliServer, JellyfinServer, EmbyServer]] = []
         
         for server in self._module_config:
             if server.type == "plex":
