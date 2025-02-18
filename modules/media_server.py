@@ -295,15 +295,15 @@ class EmbyServer(BaseServer):
             if session.get("NowPlayingItem"): # Ignore sessions that aren't playing anything
                 session_ids.append(session["Id"])
 
-                if session["PlayState"]["PlayMethod"] == "DirectStream":
-                    logger.debug(f"{self._logger_prefix} {session['Id']} is direct play, calculating estimated bandwidth from MediaStreams")
-                    
+                if session["PlayState"]["PlayMethod"] == "Transcode":
+                    bandwidth = int(session["TranscodingInfo"]["Bitrate"])
+
+                else:
+                    logger.debug(f"{self._logger_prefix} {session['Id']} is direct play or direct stream, calculating estimated bandwidth from MediaStreams")
+
                     bandwidth = 0
                     for stream in session["NowPlayingItem"]["MediaStreams"]:
                         bandwidth += int(stream.get("BitRate", 0))
-                
-                else:
-                    bandwidth = int(session["TranscodingInfo"]["Bitrate"])
 
                 count += self.process_session(
                     bandwidth   = bandwidth,
