@@ -13,7 +13,7 @@ class ClientConfig(YAMLWizard):
 
 @dataclass(frozen=True)
 class MediaServerConfig(YAMLWizard):
-    type: Literal['plex', 'tautulli', 'jellyfin']
+    type: Literal['plex', 'tautulli', 'jellyfin', 'emby']
     url: str
     https_verify: bool
     bandwidth_multiplier: float

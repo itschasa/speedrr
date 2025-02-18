@@ -9,7 +9,7 @@
   <Privileged>false</Privileged>
   <Project>https://github.com/itschasa/speedrr</Project>
   <Overview>
-    Dynamically manage upload speeds on torrent clients, with Plex/Jellyfin intergration.[br]
+    Dynamically manage upload speeds on torrent clients, with Plex/Jellyfin/Emby intergration.[br]
     Preset config available at: https://github.com/itschasa/speedrr/blob/main/config.yaml [br]
     Config needs to be saved in your /mnt/user/appdata/speedrr/ folder.
   </Overview>

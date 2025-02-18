@@ -5,7 +5,7 @@
 </p>
 
 Change your torrent client's upload speed dynamically, on certain events such as:
-- When a Plex/Jellyfin stream starts
+- When a Plex/Jellyfin/Emby stream starts
 - Time of day and day of the week
 - <i>More coming soon!</i>
 
@@ -15,11 +15,11 @@ Change your torrent client's download speed dynamically, on certain events such 
 - <i>More coming soon!</i>
 
 
-This script is ideal for users with limited upload speed, however anyone can use it to maximise their upload speed, whilst keeping their Plex/Jellyfin streams buffer-free! Also great to adjust the download rate during the day, in case the bandwidth is needed for something else!
+This script is ideal for users with limited upload speed, however anyone can use it to maximise their upload speed, whilst keeping their Plex/Jellyfin/Emby streams buffer-free! Also great to adjust the download rate during the day, in case the bandwidth is needed for something else!
 
 
 ## Features
-- Multi-server support for Plex, Jellyfin, and Tautulli.
+- Multi-server support for Plex, Jellyfin, Emby, and Tautulli.
 - Supports qBittorrent (more clients soon, maybe).
 - Multi-torrent-client support.
     - Bandwidth is split between them, by number of downloading/uploading torrents.
