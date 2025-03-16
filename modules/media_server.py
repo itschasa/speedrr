@@ -184,7 +184,7 @@ class PlexServer(BaseServer):
             count += self.process_session(
                 bandwidth   = int(session["Session"]["bandwidth"]),
                 paused      = session["Player"]["state"] == "paused",
-                ip_address  = session["Session"]["location"],
+                ip_address  = session["Player"]["address"],
                 session_id  = session["Session"]["id"],
                 title       = session["title"]
             )
