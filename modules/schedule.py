@@ -77,22 +77,18 @@ class ScheduleThread(threading.Thread):
 
     
     def calculate_next_occurrence(self, hour: int, minute: int) -> datetime:
-        "Calculate the next occurrence of the time specified by hour and minute."
+        now = datetime.now(self.timezone)
+        today = now.date()
+        
+        for day_offset in range(8):  # Search up to 7 days ahead
+            candidate_date = today + timedelta(days=day_offset)
+            if candidate_date.weekday() in self._days_as_int:
+                candidate_time = datetime.combine(candidate_date, time(hour, minute), tzinfo=self.timezone)
+                if candidate_time > now:
+                    return candidate_time
 
-        now = datetime.now(tz=self.timezone)
-        current_day = now.weekday()
-        current_hour = now.hour
-        current_minute = now.minute
-
-        if current_day in self._days_as_int and (current_hour, current_minute) < (hour, minute):
-            return datetime(now.year, now.month, now.day, hour, minute, tzinfo=self.timezone)
-        else:
-            for day in self._days_as_int:
-                if day > current_day: # if the day is in the future
-                    return datetime(now.year, now.month, now.day + day - current_day, hour, minute, tzinfo=self.timezone)
-            
-            # gets the first available day in the next week
-            return datetime(now.year, now.month, now.day + 7 - current_day + self._days_as_int[0], hour, minute, tzinfo=self.timezone)
+        # If all else fails, raise an exception (should not happen with a valid _days_as_int)
+        raise ValueError("No valid next occurrence found within the next week.")
     
 
     def set_reduction(self):
