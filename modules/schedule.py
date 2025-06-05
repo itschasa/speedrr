@@ -1,7 +1,7 @@
 import threading
 from typing import List
-from datetime import datetime, timezone, timedelta
-import time
+from datetime import datetime, timezone, timedelta, time
+from time import sleep
 
 from helpers.config import SpeedrrConfig, ScheduleConfig
 from helpers.log_loader import logger
@@ -127,7 +127,7 @@ class ScheduleThread(threading.Thread):
                 sleeping_time = (next_end_occurrence - datetime.now(tz=self.timezone)).total_seconds()
                 logger.debug(f"<ScheduleThread> start>end, Sleeping for {sleeping_time} seconds")
 
-                time.sleep(sleeping_time)
+                sleep(sleeping_time)
             
             elif next_start_occurrence < next_end_occurrence:
                 # currently outside the start and end time
@@ -136,7 +136,7 @@ class ScheduleThread(threading.Thread):
                 sleeping_time = (next_start_occurrence - datetime.now(tz=self.timezone)).total_seconds()
                 logger.debug(f"<ScheduleThread> start<end, Sleeping for {sleeping_time} seconds")
 
-                time.sleep(sleeping_time)
+                sleep(sleeping_time)
             
             else:
                 # start and end time are the same
