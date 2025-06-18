@@ -97,36 +97,35 @@ class BaseServer(threading.Thread):
     def process_session(self, bandwidth: int, paused: bool, ip_address: str, session_id: str, title: str) -> int:
         "Process a session and return the bandwidth usage. Returns 0 if the session should be ignored."
 
-        if paused and self._server_config.ignore_paused_after != -1:
+        if paused and self._server_config.ignore_streams.paused_after != -1:
             
             if session_id not in self._paused_since:
                 self._paused_since[session_id] = int(time.time())
                 logger.debug(f"{self._logger_prefix} {title}:{session_id} is paused, noted time")
             
-            elif int(time.time()) - self._paused_since[session_id] > self._server_config.ignore_paused_after:
+            elif int(time.time()) - self._paused_since[session_id] > self._server_config.ignore_streams.paused_after:
                 logger.debug(f"{self._logger_prefix} Removing {title}:{session_id} from count, paused for too long")
                 return 0
         
-        elif self._server_config.ignore_paused_after != -1:
+        elif self._server_config.ignore_streams.paused_after != -1:
             if session_id in self._paused_since:
                 logger.debug(f"{self._logger_prefix} {title}:{session_id} is no longer paused, removing from paused dict")
                 del self._paused_since[session_id]
         
+        local_ip: bool = False
         
-        if ip_address == "lan":
-            local_ip = True
-        
-        elif ip_address == "wan":
-            local_ip = False
-        
-        elif ipaddress.ip_address(ip_address).is_private:
-            local_ip = True
-        
-        else:
-            local_ip = False
+        if self._server_config.ignore_streams.local:
+            if ip_address == "lan" or ipaddress.ip_address(ip_address).is_private:
+                local_ip = True
+                
+        if self._server_config.ignore_streams.ip_networks:
+            ip = ipaddress.ip_address(ip_address)
+            networks = (ipaddress.ip_network(network) for network in self._server_config.ignore_streams.ip_networks)
+            if any(ip in network for network in networks):
+                local_ip = True
 
 
-        if local_ip and self._server_config.ignore_local_streams:
+        if local_ip:
             logger.debug(f"{self._logger_prefix} Ignoring local stream {title}:{session_id} ({ip_address})")
             return 0
         
