@@ -20,7 +20,7 @@ This script is ideal for users with limited upload speed, however anyone can use
 
 ## Features
 - Multi-server support for Plex, Jellyfin, Emby, and Tautulli.
-- Supports qBittorrent (more clients soon, maybe).
+- Supports qBittorrent and Transmission.
 - Multi-torrent-client support.
     - Bandwidth is split between them, by number of downloading/uploading torrents.
 - Schedule a time/day when upload speed should be lowered.
