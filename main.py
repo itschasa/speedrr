@@ -4,7 +4,7 @@ import traceback
 
 from helpers.log_loader import logger
 from helpers import arguments, config, log_loader
-from clients import qbittorrent
+from clients import qbittorrent, transmission
 from modules import media_server, schedule
 
 
@@ -31,11 +31,14 @@ if __name__ == '__main__':
     update_event = threading.Event()
     
 
-    clients: List[Union[qbittorrent.qBittorrentClient]] = []
+    clients: List[Union[qbittorrent.qBittorrentClient, transmission.transmissionClient]] = []
     for client in cfg.clients:
         if client.type == "qbittorrent":
             torrent_client = qbittorrent.qBittorrentClient(cfg, client)
-        
+
+        elif client.type == "transmission":
+            torrent_client = transmission.transmissionClient(cfg, client)
+
         else:
             logger.critical(f"Unknown client type in config: {client.type}")
             exit()
