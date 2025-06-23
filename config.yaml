@@ -48,7 +48,7 @@ max_download: 100
 clients:
 
   # The type of torrent client
-  # Options: qbittorrent
+  # Options: qbittorrent, transmission
   - type: qbittorrent
 
     # The URL to your torrent client
@@ -60,6 +60,7 @@ clients:
 
     # Whether to verify the SSL certificate of the torrent client
     # If you are unsure what this means, leave it as is.
+    # Only has an influence on qbittorrent
     https_verify: true
 
 
