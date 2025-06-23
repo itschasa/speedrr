@@ -252,7 +252,7 @@ class JellyfinServer(BaseServer):
             if session.get("NowPlayingItem"): # Ignore sessions that aren't playing anything
                 session_ids.append(session["Id"])
 
-                if session["PlayState"]["PlayMethod"] == "DirectPlay":
+                if session["PlayState"]["PlayMethod"] in ["DirectPlay", "DirectStream"]:
                     logger.debug(f"{self._logger_prefix} {session['Id']} is direct play, calculating estimated bandwidth from MediaStreams")
                     
                     bandwidth = 0
