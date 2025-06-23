@@ -12,14 +12,19 @@ class ClientConfig(YAMLWizard):
     https_verify: bool
 
 @dataclass(frozen=True)
+class IgnoreStreamConfig(YAMLWizard):
+    local: bool
+    ip_networks: Optional[tuple[str, ...]]
+    paused_after: int
+
+@dataclass(frozen=True)
 class MediaServerConfig(YAMLWizard):
     type: Literal['plex', 'tautulli', 'jellyfin', 'emby']
     url: str
     https_verify: bool
     bandwidth_multiplier: float
     update_interval: int
-    ignore_local_streams: bool
-    ignore_paused_after: int
+    ignore_streams: IgnoreStreamConfig
     token: Optional[str] = None
     api_key: Optional[str] = None
 
@@ -30,7 +35,7 @@ class MediaServerConfig(YAMLWizard):
 class ScheduleConfig(YAMLWizard):
     start: str
     end: str
-    days: tuple[Literal['all', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']]
+    days: tuple[Literal['all', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'], ...]
     upload: Union[int, str]
     download: Union[int, str]
 

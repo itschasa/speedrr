@@ -100,12 +100,21 @@ modules:
       # The interval in seconds to update the Plex stream data
       update_interval: 5
 
-      # Checks if a stream is local, and if it is, it will ignore it from calculations
-      ignore_local_streams: true
-      
-      # After a stream has been paused for this amount of seconds, it will be ignored from calculations
-      # Note: To disable this feature, set to -1.
-      ignore_paused_after: 300
+      # Checks if a stream matches any of the given conditions, and if it does, it will ignore it from calculations
+      ignore_streams:
+        
+        # Whether to ignore all local streams (i.e. streams from IP addresses considered private)
+        local: true
+        
+        # Optional list of IP networks to ignore
+        # Each network should consist of an IP address and an optional netmask, separated by a slash
+        # If no mask is provided, it's considered to be /32
+        # Example: 192.168.0.0/24, 192.168.1.123
+        ip_networks:
+        
+        # After a stream has been paused for this amount of seconds, it will be ignored from calculations
+        # Note: To disable this feature, set to -1.
+        paused_after: 300
   
 
   # Changes the upload/download speed based on the time of day, and what day of the week
