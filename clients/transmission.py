@@ -5,6 +5,7 @@ from transmission_rpc.error import (
     TransmissionTimeoutError,
 )
 from typing import Union, Literal
+import urllib.parse
 
 from helpers.config import SpeedrrConfig, ClientConfig
 from helpers.log_loader import logger
@@ -12,29 +13,32 @@ from helpers.bit_convert import bit_conv
 
 class transmissionClient:
     def __init__(self, config: SpeedrrConfig, config_client: ClientConfig) -> None:
-        # Get protocol and host adress from the url
-        if "http" in config_client.url:
-            protocol, url_adress = config_client.url.split("://")
-            if protocol not in ("http", "https"):
-                raise ValueError(f"<trans|{self._client_config.url}> Url protocol has to be http or https, not {protocol}")
-            url_protocol: Literal['http', 'https'] = protocol
-        else:
-            url_protocol = "http"
-            url_adress = config_client.url
-
         self._client_config = config_client
         self._config = config
+
+        u = urllib.parse.urlparse(config_client.url)
+
+        protocol = u.scheme
+        if protocol == "http":
+            default_port = 80
+        elif protocol == "https":
+            default_port = 443
+        else:
+            raise ValueError(f"<trans|{self._client_config.url}> Unknown url scheme {u.scheme}")
+        
+        if u.hostname is None:
+            raise ValueError(f"<trans|{self._client_config.url}> Missing hostname")
 
         logger.debug(f"<trans|{self._client_config.url}> Connecting to Transmission at {config_client.url}")
 
         try:
             self._client = transmission_rpc.Client(
-                protocol = url_protocol,
-                username = config_client.url,
+                protocol = protocol,
+                username = config_client.username,
                 password = config_client.password,
-                host = url_adress,
-                port = 9091, # TODO allow custom port
-                path = '/transmission/rpc', # TODO Check if this has to be customisable
+                host = u.hostname,
+                port = u.port or default_port, # TODO allow custom port
+                path = u.path or "/transmission/rpc", # TODO Check if this has to be customisable
             )
         
         except TransmissionTimeoutError:
