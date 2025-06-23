@@ -16,6 +16,8 @@ class TransmissionClient:
         self._client_config = config_client
         self._config = config
 
+
+        # Gets hostname, port, and path from url and checks if values are sensible
         u = urllib.parse.urlparse(config_client.url)
 
         protocol = u.scheme
@@ -28,6 +30,7 @@ class TransmissionClient:
         
         if u.hostname is None:
             raise ValueError(f"<trans|{self._client_config.url}> Missing hostname")
+
 
         logger.debug(f"<trans|{self._client_config.url}> Connecting to Transmission at {config_client.url}")
 
