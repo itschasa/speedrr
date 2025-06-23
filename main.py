@@ -31,13 +31,13 @@ if __name__ == '__main__':
     update_event = threading.Event()
     
 
-    clients: List[Union[qbittorrent.qBittorrentClient, transmission.transmissionClient]] = []
+    clients: List[Union[qbittorrent.qBittorrentClient, transmission.TransmissionClient]] = []
     for client in cfg.clients:
         if client.type == "qbittorrent":
             torrent_client = qbittorrent.qBittorrentClient(cfg, client)
 
         elif client.type == "transmission":
-            torrent_client = transmission.transmissionClient(cfg, client)
+            torrent_client = transmission.TransmissionClient(cfg, client)
 
         else:
             logger.critical(f"Unknown client type in config: {client.type}")

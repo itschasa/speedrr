@@ -11,7 +11,7 @@ from helpers.config import SpeedrrConfig, ClientConfig
 from helpers.log_loader import logger
 from helpers.bit_convert import bit_conv
 
-class transmissionClient:
+class TransmissionClient:
     def __init__(self, config: SpeedrrConfig, config_client: ClientConfig) -> None:
         self._client_config = config_client
         self._config = config
