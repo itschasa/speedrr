@@ -47,3 +47,11 @@ class transmissionClient:
             raise Exception(f"<trans|{self._client_config.url}> Failed to connect to Transmission, check your url")
 
         logger.debug(f"<trans|{self._client_config.url}> Connected to Transmission")
+
+    def get_active_torrent_count(self) -> int:
+        "Get the number of torrents that are currently downloading or uploading."
+
+        logger.debug(f"<trans|{self._client_config.url}> Getting active torrent count")
+
+        sessionStats = self._client.session_stats()
+        return sessionStats.active_torrent_count
