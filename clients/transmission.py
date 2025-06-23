@@ -4,7 +4,7 @@ from transmission_rpc.error import (
     TransmissionConnectError,
     TransmissionTimeoutError,
 )
-from typing import Union, Literal
+from typing import Union
 import urllib.parse
 
 from helpers.config import SpeedrrConfig, ClientConfig
@@ -37,8 +37,8 @@ class TransmissionClient:
                 username = config_client.username,
                 password = config_client.password,
                 host = u.hostname,
-                port = u.port or default_port, # TODO allow custom port
-                path = u.path or "/transmission/rpc", # TODO Check if this has to be customisable
+                port = u.port or default_port,
+                path = u.path or "/transmission/rpc",
             )
         
         except TransmissionTimeoutError:
