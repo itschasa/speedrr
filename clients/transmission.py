@@ -55,3 +55,19 @@ class transmissionClient:
 
         sessionStats = self._client.session_stats()
         return sessionStats.active_torrent_count
+
+    def set_upload_speed(self, speed: Union[int, float]) -> None:
+        "Set the upload speed limit for the client, in config units."
+
+        logger.debug(f"<trans|{self._client_config.url}> Setting upload speed to {speed}{self._config.units}")
+
+        speed_limit_up = max(1, int(bit_conv(speed, self._config.units, 'KB')))
+        self._client.set_session(speed_limit_up=speed_limit_up)
+
+    def set_download_speed(self, speed: Union[int, float]) -> None:
+        "Set the download speed limit for the client, in config units."
+
+        logger.debug(f"<trans|{self._client_config.url}> Setting dowload speed to {speed}{self._config.units}")
+
+        speed_limit_down = max(1, int(bit_conv(speed, self._config.units, "KB")))
+        self._client.set_session(speed_limit_down=speed_limit_down)
