@@ -68,7 +68,7 @@ class ScheduleThread(threading.Thread):
             self._upload_reduce_by = self._config.upload
 
         if isinstance(self._config.download, str):
-            self._download_reduce_by = int(self._config.download[:-1]) / 100 * self._module._config.max_upload
+            self._download_reduce_by = int(self._config.download[:-1]) / 100 * self._module._config.max_download
         else:
             self._download_reduce_by = self._config.download
         
