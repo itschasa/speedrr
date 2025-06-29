@@ -10,6 +10,9 @@ class ClientConfig(YAMLWizard):
     username: str
     password: str
     https_verify: bool
+    download_shares: int = 1
+    upload_shares: int = 1
+
 
 @dataclass(frozen=True)
 class IgnoreStreamConfig(YAMLWizard):
@@ -82,7 +85,7 @@ class SpeedrrConfig(YAMLWizard):
     max_download: int
     clients: List[ClientConfig]
     modules: ModulesConfig
-
+    manual_speed_algorithm_share: Optional[bool] = False
 
 def load_config(config_file: str) -> SpeedrrConfig:
     config = SpeedrrConfig.from_yaml_file(config_file)
