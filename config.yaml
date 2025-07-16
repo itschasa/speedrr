@@ -43,10 +43,11 @@ min_download: 10
 # This should be around 70-100% of your total download speed.
 max_download: 100
 
+manual_speed_algorithm_share: false # Set speed based on manually configured shares instead of using number of active torrents
+
 # The torrent clients to be used by Speedrr
 # Note: If you have multiple clients, Speedrr will split the upload speed between them, based on the number of seeding+downloading torrents.
 clients:
-
   # The type of torrent client
   # Options: qbittorrent, transmission
   - type: qbittorrent
@@ -57,6 +58,10 @@ clients:
     # The username and password to access your torrent client
     username: <username>
     password: <password>
+
+    # Number of shares of total upload and download speed. Ignored if manual_speed_algorithm_share is set to false
+    download_shares: 1
+    upload_shares: 1
 
     # Whether to verify the SSL certificate of the torrent client
     # If you are unsure what this means, leave it as is.
