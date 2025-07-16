@@ -43,7 +43,7 @@ min_download: 10
 # This should be around 70-100% of your total download speed.
 max_download: 100
 
-manual_speed_algorithm_share: true # Set speed based on manually configured shares instead of using number of active torrents
+manual_speed_algorithm_share: false # Set speed based on manually configured shares instead of using number of active torrents
 
 # The torrent clients to be used by Speedrr
 # Note: If you have multiple clients, Speedrr will split the upload speed between them, based on the number of seeding+downloading torrents.
